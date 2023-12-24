@@ -1,25 +1,17 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://badulake:eafu2001@cluster0.d1l69fu.mongodb.net/?retryWrites=true&w=majority";
-//cadena de conexión
+const mongoose = require('mongoose');
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
-    serverApi: {
-      version: ServerApiVersion.v1,
-      strict: true,
-      deprecationErrors: true,
-    }
-  });
-  async function run() {
-    try {
-      // Connect the client to the server	(optional starting in v4.7)
-      await client.connect();
-      // Send a ping to confirm a successful connection
-      await client.db("admin").command({ ping: 1 });
-      console.log("Conectado a la base de datos mongodb atlas.");
-    } finally {
-      // Ensures that the client will close when you finish/error
-      await client.close();
-    }
-  }
-  run().catch(console.dir);
+// Reemplaza 'tu_cadena_de_conexion' con la cadena de conexión proporcionada por MongoDB Atlas
+const uri = 'mongodb+srv://badulake:eafu2001@cluster0.d1l69fu.mongodb.net/?retryWrites=true&w=majority';
+
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+const connection = mongoose.connection;
+
+connection.once('open', () => {
+    console.log('Conexión exitosa a MongoDB Atlas');
+});
+
+// Manejo de errores de conexión
+connection.on('error', (err) => {
+    console.error('Error de conexión a MongoDB Atlas:', err);
+});
